@@ -141,4 +141,9 @@ After filtering I ran FastQC on the filtered data. Per base sequence quality gre
 + I'm also running TopHat with the Trimmomatic-filtered dataset to see if we get meaningful results there.
 
 
+## Mapping to rRNA
+
+### Procedure
+
+Download all rRNA sequences from SILVA that belong to _Homo sapiens_. From there I created a Bowtie2 index and mapped the filtered reads to this index. Took care to save the unmapped reads to a file. Once this is done I will be able to quantify the levels of rRNA in our samples and rerun the FastQC to see if the peaks in per read GC content disappear.
 
