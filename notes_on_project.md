@@ -147,3 +147,12 @@ After filtering I ran FastQC on the filtered data. Per base sequence quality gre
 
 Download all rRNA sequences from SILVA that belong to _Homo sapiens_. From there I created a Bowtie2 index and mapped the filtered reads to this index. Took care to save the unmapped reads to a file. Once this is done I will be able to quantify the levels of rRNA in our samples and rerun the FastQC to see if the peaks in per read GC content disappear.
 
+### Results
+
+There was very little mapping to the rRNA sequences using Bowtie2 -- less than 1% mapping there for all samples. The peaks in GC-content did not disappear.
+
+### Next steps
+
++ TopHat is still running, but the first samples to finish show great mapping. Maybe I can filter after mapping to the genome/transcriptome?
++ On specialised forums bioinformaticians say SortMeRNA has better results than Bowtie2 when mapping to rRNA. Trying to run that but running into weird error messages.
+
