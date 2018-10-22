@@ -1,3 +1,4 @@
 .DS_Store
 *fq.gz
+*.fq
 *.bt2
