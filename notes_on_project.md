@@ -156,3 +156,20 @@ There was very little mapping to the rRNA sequences using Bowtie2 -- less than 1
 + TopHat is still running, but the first samples to finish show great mapping. Maybe I can filter after mapping to the genome/transcriptome?
 + On specialised forums bioinformaticians say SortMeRNA has better results than Bowtie2 when mapping to rRNA. Trying to run that but running into weird error messages.
 
+## SortMeRNA
+
+### Procedure
+
+Used SortMeRNA with the SILVA and RFAM databases to identify rRNA reads in our samples. Afterwards ran FastQC on the non-rRNA files.
+
+### Results
+
+Each sample had around 1.5% of rRNA. This was not enough to remove the peaks in GC content. I'm thinking it also includes tRNAs.
+
+### Next steps
+
++ TopHat still running.
++ Started Bowtie2 to run against a fasta file extracted from UCSC that has rRNA and tRNA.
+
+
+
