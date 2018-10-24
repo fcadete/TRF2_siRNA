@@ -1,0 +1,21 @@
+{
+    "read_files": "( filtered_fastq/T_d96h_2_1_filtered_paired.fq, filtered_fastq/T_d96h_2_2_filtered_paired.fq )",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 0.8696393797665778,
+    "num_compatible_fragments": 29919535,
+    "num_assigned_fragments": 34404531,
+    "num_consistent_mappings": 116467631,
+    "num_inconsistent_mappings": 16884037,
+    "MSF": 0,
+    "OSF": 10001,
+    "ISF": 11625836,
+    "MSR": 0,
+    "OSR": 84088,
+    "ISR": 116467631,
+    "SF": 1495749,
+    "SR": 3501730,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

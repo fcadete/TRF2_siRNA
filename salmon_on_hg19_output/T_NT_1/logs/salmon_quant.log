@@ -1,0 +1,54 @@
+[2018-10-23 16:27:16.086] [jointLog] [info] parsing read library format
+[2018-10-23 16:27:16.086] [jointLog] [info] There is 1 library.
+[2018-10-23 16:27:16.209] [jointLog] [info] Loading Quasi index
+[2018-10-23 16:27:16.211] [jointLog] [info] Loading 32-bit quasi index
+[2018-10-23 16:27:27.602] [jointLog] [info] done
+[2018-10-23 16:27:27.602] [jointLog] [info] Index contained 187626 targets
+[2018-10-23 16:27:30.826] [jointLog] [info] Automatically detected most likely library type as ISR
+[2018-10-23 16:29:53.712] [jointLog] [info] Computed 379005 rich equivalence classes for further processing
+[2018-10-23 16:29:53.712] [jointLog] [info] Counted 32369502 total reads in the equivalence classes 
+[2018-10-23 16:29:53.832] [jointLog] [info] Mapping rate = 69.5503%
+
+[2018-10-23 16:29:53.832] [jointLog] [info] finished quantifyLibrary()
+[2018-10-23 16:29:53.841] [jointLog] [info] Starting optimizer
+[2018-10-23 16:29:53.713] [fileLog] [info] 
+At end of round 0
+==================
+Observed 46541131 total fragments (46541131 in most recent round)
+
+[2018-10-23 16:29:54.105] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+[2018-10-23 16:29:54.114] [jointLog] [info] iteration = 0 | max rel diff. = 55.8197
+[2018-10-23 16:29:54.202] [jointLog] [info] iteration 11, adjusting effective lengths to account for biases
+[2018-10-23 16:30:52.398] [jointLog] [info] Computed expected counts (for bias correction)
+[2018-10-23 16:30:52.398] [jointLog] [info] processed bias for 0.0% of the transcripts
+[2018-10-23 16:30:59.443] [jointLog] [info] processed bias for 10.0% of the transcripts
+[2018-10-23 16:31:06.690] [jointLog] [info] processed bias for 20.0% of the transcripts
+[2018-10-23 16:31:13.695] [jointLog] [info] processed bias for 30.0% of the transcripts
+[2018-10-23 16:31:21.541] [jointLog] [info] processed bias for 40.0% of the transcripts
+[2018-10-23 16:31:29.396] [jointLog] [info] processed bias for 50.0% of the transcripts
+[2018-10-23 16:31:37.218] [jointLog] [info] processed bias for 60.0% of the transcripts
+[2018-10-23 16:31:44.691] [jointLog] [info] processed bias for 70.0% of the transcripts
+[2018-10-23 16:31:51.181] [jointLog] [info] processed bias for 100.0% of the transcripts
+[2018-10-23 16:31:51.943] [jointLog] [info] iteration = 100 | max rel diff. = 0.277657
+[2018-10-23 16:31:52.779] [jointLog] [info] iteration = 200 | max rel diff. = 0.113139
+[2018-10-23 16:31:53.577] [jointLog] [info] iteration = 300 | max rel diff. = 0.144432
+[2018-10-23 16:31:54.375] [jointLog] [info] iteration = 400 | max rel diff. = 0.0459723
+[2018-10-23 16:31:55.184] [jointLog] [info] iteration = 500 | max rel diff. = 0.0210803
+[2018-10-23 16:31:56.018] [jointLog] [info] iteration = 600 | max rel diff. = 0.0296982
+[2018-10-23 16:31:56.815] [jointLog] [info] iteration = 700 | max rel diff. = 0.0315158
+[2018-10-23 16:31:57.607] [jointLog] [info] iteration = 800 | max rel diff. = 0.0150406
+[2018-10-23 16:31:58.411] [jointLog] [info] iteration = 900 | max rel diff. = 0.0166824
+[2018-10-23 16:31:59.219] [jointLog] [info] iteration = 1000 | max rel diff. = 0.0151687
+[2018-10-23 16:32:00.078] [jointLog] [info] iteration = 1100 | max rel diff. = 0.0131364
+[2018-10-23 16:32:00.913] [jointLog] [info] iteration = 1200 | max rel diff. = 0.0212438
+[2018-10-23 16:32:01.710] [jointLog] [info] iteration = 1300 | max rel diff. = 0.017721
+[2018-10-23 16:32:02.529] [jointLog] [info] iteration = 1400 | max rel diff. = 0.0155845
+[2018-10-23 16:32:03.306] [jointLog] [info] iteration = 1500 | max rel diff. = 0.0115105
+[2018-10-23 16:32:03.481] [jointLog] [info] iteration = 1524 | max rel diff. = 0.00997909
+[2018-10-23 16:32:03.508] [jointLog] [info] Finished optimizer
+[2018-10-23 16:32:03.508] [jointLog] [info] writing output 
+
+[2018-10-23 16:32:03.854] [jointLog] [warning] NOTE: Read Lib [( filtered_fastq/T_NT_1_1_filtered_paired.fq, filtered_fastq/T_NT_1_2_filtered_paired.fq )] :
+
+Greater than 5% of the fragments disagreed with the provided library type; check the file: salmon_on_hg19_output/T_NT_1/lib_format_counts.json for details
+
