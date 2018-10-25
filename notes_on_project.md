@@ -171,5 +171,20 @@ Each sample had around 1.5% of rRNA. This was not enough to remove the peaks in 
 + TopHat still running.
 + Started Bowtie2 to run against a fasta file extracted from UCSC that has rRNA and tRNA.
 
+## Bowtie2 against rRNA and tRNA
 
+### Procedure
+
+Same as the previous bowtie2 attempt where I mapped the reads to the rRNA sequences, but now I map them to the rRNA and tRNA sequences I extracted from the UCSC genome browser.
+
+### Results
+
+Still very low mapping, less than 1% for all samples. So it doesn't seem to be tRNAs either that are causing the GC-per sequence peaks.
+
+### Next steps
+
++ Analyze the TopHat alignments to see if any genes are showing up.
++ Run a non-mapping based RNA-seq quantifier like Salmon to get gene counts and proceed with downstream analysis.
+
+ 
 
