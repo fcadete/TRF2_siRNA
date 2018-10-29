@@ -1,0 +1,28 @@
+#!/bin/bash
+#SBATCH --job-name=fastQC
+#SBATCH --time=4:00:00
+#SBATCH --mem-per-cpu=8G
+#SBATCH --ntasks=4
+#SBATCH --cpus-per-task=1
+#SBATCH --image=docker:argrosso/htspreprocessing:0.1.1
+#SBATCH --workdir=/mnt/nfs/lobo/SALMEIDA-NFS/fcadete/TRF2_siRNA
+
+OUTPUTDIR=filtered_tophat_mapped_fastqc_reports
+
+mkdir $OUTPUTDIR
+
+for f in tophat_extracted_fastq/*fq; do
+
+filename=$(basename "$f")
+
+mkdir $OUTPUTDIR/$filename
+
+srun --exclusive -n1 -N1 shifter bash -c "fastqc --outdir=$OUTPUTDIR/ $f" &
+
+done
+
+wait
+
+
+echo "Statistics for job $SLURM_JOB_ID:"
+sacct --format="JOBID,Start,End,Elapsed,AllocCPUs,CPUTime,AveDiskRead,AveDiskWrite,MaxRSS,MaxVMSize,exitcode,derivedexitcode" -j $SLURM_JOB_ID
