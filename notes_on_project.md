@@ -186,5 +186,17 @@ Still very low mapping, less than 1% for all samples. So it doesn't seem to be t
 + Analyze the TopHat alignments to see if any genes are showing up.
 + Run a non-mapping based RNA-seq quantifier like Salmon to get gene counts and proceed with downstream analysis.
 
- 
+## FastQC on TopHat-aligned reads
+
+### Procedure
+
+Ran TopHat to map Trimmomatic-filtered reads to the genome. Then extracted the fastq files corresponding to the mapped reads and ran QC on them. The idea was to see if the reads that mapped did not include the weird GC peaks.
+
+### Results.
+
+The reads that mapped include the weird GC peaks. Frustrating.
+
+### Next steps
+
+Count the reads per gene and see if mtRNA, rRNA or tRNAs show up in the high counts. 
 
