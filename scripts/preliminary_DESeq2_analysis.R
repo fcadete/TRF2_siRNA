@@ -1,12 +1,9 @@
-source("https://bioconductor.org/biocLite.R")
-biocLite("DESeq2")
+
 library("DESeq2")
 
 library("tximport")
-biocLite("EnsDb.Hsapiens.v86")
 library("EnsDb.Hsapiens.v86")
 
-install.packages("tidyverse")
 library("tidyverse")
 
 samples <- read_tsv("sample_info.txt")
