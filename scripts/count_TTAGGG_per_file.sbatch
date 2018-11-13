@@ -6,7 +6,7 @@
 
 mkdir repeat_counts
 
-for file in filtered_fastq/*_paired.fq
+for file in ../C101HW18062594/raw_data/*fq.gz
 do
    filename=$(basename "${file%.*}")
    srun -n1 -N1 --exclusive bash -c "grep -o -n 'TTAGGG' $file | cut -d : -f 1 | uniq -c | sed -e 's/  \+//' > repeat_counts/${filename}_TERRA.repeat_count" &
