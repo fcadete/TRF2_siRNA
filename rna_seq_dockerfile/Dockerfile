@@ -18,7 +18,15 @@ RUN Rscript -e "install.packages('tidyverse')"
 RUN Rscript -e "install.packages('RColorBrewer')"
 RUN Rscript -e "install.packages('pheatmap')"
 
+# Install bioconductor packages for microarray analysis
+RUN Rscript -e "BiocManager::install('oligo')"
+RUN Rscript -e "BiocManager::install('hta20transcriptcluster.db')"
+RUN Rscript -e "BiocManager::install('affycoretools')"
+RUN Rscript -e "BiocManager::install('pd.hta.2.0')"
 
 #Install HTSeq-count
 RUN pip install HTSeq
+
+RUN Rscript -e "install.packages('VennDiagram')"
+RUN Rscript -e "install.packages('ggrepel')"
 
