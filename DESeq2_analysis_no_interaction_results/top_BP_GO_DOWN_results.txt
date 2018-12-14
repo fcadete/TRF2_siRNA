@@ -1,0 +1,12 @@
+GO.ID	Term	Annotated	Significant	Expected	Rank in Fisher.classic	Fisher.elim	Fisher.classic
+GO:1901606	alpha-amino acid catabolic process	21	11	4.3	1	0.0011	0.0011
+GO:1901605	alpha-amino acid metabolic process	51	20	10.44	2	0.3262	0.0015
+GO:0009063	cellular amino acid catabolic process	25	12	5.12	3	0.5943	0.0018
+GO:0009081	branched-chain amino acid metabolic proc...	7	5	1.43	4	0.3656	0.0051
+GO:0032663	regulation of interleukin-2 production	7	5	1.43	5	0.0051	0.0051
+GO:0009404	toxin metabolic process	5	4	1.02	6	0.0073	0.0073
+GO:0006573	valine metabolic process	5	4	1.02	7	0.0073	0.0073
+GO:0019081	viral translation	5	4	1.02	8	0.0073	0.0073
+GO:0000380	alternative mRNA splicing, via spliceoso...	19	9	3.89	9	0.0076	0.0076
+GO:0140014	mitotic nuclear division	73	24	14.95	10	0.2058	0.0080
+GO:0007088	regulation of mitotic nuclear division	40	15	8.19	11	0.0093	0.0093

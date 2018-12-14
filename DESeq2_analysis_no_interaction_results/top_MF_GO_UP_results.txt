@@ -1,0 +1,7 @@
+GO.ID	Term	Annotated	Significant	Expected	Rank in Fisher.classic	Fisher.elim	Fisher.classic
+GO:0005516	calmodulin binding	18	9	3.35	1	0.0024	0.0024
+GO:0043177	organic acid binding	22	10	4.09	2	1.0000	0.0034
+GO:0031406	carboxylic acid binding	22	10	4.09	3	0.0034	0.0034
+GO:0060089	molecular transducer activity	93	28	17.3	4	0.0042	0.0042
+GO:0050662	coenzyme binding	58	19	10.79	5	0.0065	0.0065
+GO:0050839	cell adhesion molecule binding	100	29	18.61	6	0.0066	0.0066

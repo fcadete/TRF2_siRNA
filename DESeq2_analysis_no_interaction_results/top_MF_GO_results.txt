@@ -1,0 +1,8 @@
+GO.ID	Term	Annotated	Significant	Expected	Rank in Fisher.classic	Fisher.elim	Fisher.classic
+GO:0098641	cadherin binding involved in cell-cell a...	10	5	1.18	1	0.0034	0.0034
+GO:0003777	microtubule motor activity	25	8	2.95	2	0.0062	0.0062
+GO:0043177	organic acid binding	37	10	4.37	3	1.0000	0.0087
+GO:0009055	electron transfer activity	37	10	4.37	4	0.0087	0.0087
+GO:0031406	carboxylic acid binding	37	10	4.37	5	0.0087	0.0087
+GO:0016701	oxidoreductase activity, acting on singl...	8	4	0.94	6	1.0000	0.0091
+GO:0016702	oxidoreductase activity, acting on singl...	8	4	0.94	7	0.0091	0.0091
