@@ -14,7 +14,7 @@ library("VennDiagram")
 
 library("Rsamtools")
 
-setwd("/mnt/TRF2_siRNA/")
+#setwd("/mnt/TRF2_siRNA/")
 
 pdf("DESeq2_analysis_no_interaction_results/TTAGGG_repeat_analysis.pdf", width = 10)
 
@@ -92,4 +92,63 @@ gene_telreps <- data_frame(gene_ID = names(genes_in_data),
                            telrep_matches = gene_telrep_number_matches,
                            gene_width = width(genes_in_data))
 
+
+ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches)) + geom_point()
+
+ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches)) + geom_point() + scale_x_log10()
+
+ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches)) + geom_point() + scale_x_log10() + scale_y_log10()
+
+
+# so the number of TTAGG repeats is very correlated with the length of the gene, which makes absolute sense
+
+# We want the genes that deviate from this! There are some outliers in the scatterplot.
+
+# First let's try to normalise just by getting the repeat to length ratio
+
+ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches / gene_width)) + geom_point()
+ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches / gene_width)) + geom_point() + scale_y_log10()
+ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches / gene_width)) + geom_point() + scale_x_log10() + scale_y_log10()
+
+
+# Let's try to use linear modelling
+
+mod <- lm(telrep_matches ~ gene_width, data = gene_telreps)
+
+gene_telreps <- modelr::add_predictions(gene_telreps, mod) %>%
+                modelr::add_residuals(mod)
+
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches)) + geom_line(aes(y=pred), colour = "red", size = 1)
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid))
+
+gene_telreps$res96h <- gene_telreps$gene_ID %in% names(selected_genes_96h)
+
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches, colour = res96h)) + geom_line(aes(y=pred), colour = "red", size = 1)
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid, colour = res96h))
+
+# And now let's try a Poisson GLM
+
+poisson_mod <- glm(telrep_matches ~ gene_width, poisson, data = gene_telreps)
+
+gene_telreps <- modelr::add_predictions(gene_telreps, poisson_mod) %>%
+                modelr::add_residuals(poisson_mod)
+
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches)) + geom_line(aes(y=pred), colour = "red", size = 1)
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid))
+
+gene_telreps$res96h <- gene_telreps$gene_ID %in% names(selected_genes_96h)
+
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches, colour = res96h)) + geom_line(aes(y=pred), colour = "red", size = 1)
+
+ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid, colour = res96h))
+
+
+dev.off()
 
