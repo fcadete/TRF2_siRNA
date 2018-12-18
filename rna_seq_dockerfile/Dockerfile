@@ -30,3 +30,15 @@ RUN pip install HTSeq
 RUN Rscript -e "install.packages('VennDiagram')"
 RUN Rscript -e "install.packages('ggrepel')"
 
+#Install samtools
+RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 \
+    && tar xvjf samtools-1.9.tar.bz2 \
+    && cd samtools-1.9 \
+    && ./configure --without-curses --disable-bz2 --disable-lzma \
+    && make \
+    && make install
+
+
+# Install Ballgown
+RUN Rscript -e "BiocManager::install('ballgown')"
+

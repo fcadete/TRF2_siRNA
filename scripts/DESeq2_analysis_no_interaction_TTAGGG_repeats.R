@@ -14,7 +14,7 @@ library("VennDiagram")
 
 library("Rsamtools")
 
-#setwd("/mnt/TRF2_siRNA/")
+setwd("/mnt/TRF2_siRNA/")
 
 pdf("DESeq2_analysis_no_interaction_results/TTAGGG_repeat_analysis.pdf", width = 10)
 
@@ -79,76 +79,185 @@ genes_in_data <- GenomicFeatures::genes(EnsDb.Hsapiens.v86, filter = GeneIdFilte
 
 genes_in_data <- genes_in_data[seqnames(genes_in_data) %in% seqnames(seqinfo(Dna))]
 
-geneSeqs <- getSeq(Dna, genes_in_data)
-
-gene_telrep_matches <- vmatchPattern("TTAGGG", geneSeqs)
-
-gene_telrep_number_matches <- unlist(lapply(gene_telrep_matches, length))
-
-names(gene_telrep_number_matches) <- names(genes_in_data)
-
-
 gene_telreps <- data_frame(gene_ID = names(genes_in_data),
-                           telrep_matches = gene_telrep_number_matches,
                            gene_width = width(genes_in_data))
 
+gene_telreps$res96h <- gene_telreps$gene_ID %in% names(selected_genes_96h)
 
-ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches)) + geom_point()
 
-ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches)) + geom_point() + scale_x_log10()
+geneSeqs <- getSeq(Dna, genes_in_data)
 
-ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches)) + geom_point() + scale_x_log10() + scale_y_log10()
+for (number_reps in 1:5) {
+
+  gene_telrep_matches <- vmatchPattern(paste(rep("TTAGGG", number_reps), collapse = ""), geneSeqs)
+
+  gene_telrep_number_matches <- unlist(lapply(gene_telrep_matches, length))
+
+  gene_telreps[[paste0("telrep_matches_", number_reps)]] <- gene_telrep_number_matches
+
+}
+
+
+ggplot(gene_telreps %>%
+         gather(key = "number_reps", value = "telrep_matches",
+                telrep_matches_1:telrep_matches_5),
+       aes(x = gene_width, y = telrep_matches)) +
+  geom_point() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+ggplot(gene_telreps %>%
+         gather(key = "number_reps", value = "telrep_matches",
+                telrep_matches_1:telrep_matches_5),
+       aes(x = gene_width, y = telrep_matches)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+ggplot(gene_telreps %>%
+         gather(key = "number_reps", value = "telrep_matches",
+                telrep_matches_1:telrep_matches_5),
+       aes(x = gene_width, y = telrep_matches)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
 
 
 # so the number of TTAGG repeats is very correlated with the length of the gene, which makes absolute sense
+# At least for the one tandem repeat
 
 # We want the genes that deviate from this! There are some outliers in the scatterplot.
 
 # First let's try to normalise just by getting the repeat to length ratio
 
-ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches / gene_width)) + geom_point()
-ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches / gene_width)) + geom_point() + scale_y_log10()
-ggplot(gene_telreps, aes(x = gene_width, y = telrep_matches / gene_width)) + geom_point() + scale_x_log10() + scale_y_log10()
+ggplot(gene_telreps %>%
+         gather(key = "number_reps", value = "telrep_matches",
+                telrep_matches_1:telrep_matches_5),
+       aes(x = gene_width, y = telrep_matches / gene_width)) +
+  geom_point() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+ggplot(gene_telreps %>%
+         gather(key = "number_reps", value = "telrep_matches",
+                telrep_matches_1:telrep_matches_5),
+       aes(x = gene_width, y = telrep_matches / gene_width)) +
+  geom_point() +
+  scale_y_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+ggplot(mapping = aes(x = gene_width, y = telrep_matches / gene_width, colour = res96h)) +
+  geom_point(data = gene_telreps %>%
+               gather(key = "number_reps", value = "telrep_matches",
+                      telrep_matches_1:telrep_matches_5) %>% filter(res96h == FALSE)) +
+  geom_point(data = gene_telreps %>%
+               gather(key = "number_reps", value = "telrep_matches",
+                      telrep_matches_1:telrep_matches_5) %>% filter(res96h == TRUE)) +
+  scale_y_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+ggplot(mapping = aes(x = gene_width, y = telrep_matches / gene_width, colour = res96h)) +
+  geom_point(data = gene_telreps %>%
+               gather(key = "number_reps", value = "telrep_matches",
+                      telrep_matches_1:telrep_matches_5) %>% filter(res96h == FALSE)) +
+  geom_point(data = gene_telreps %>%
+               gather(key = "number_reps", value = "telrep_matches",
+                      telrep_matches_1:telrep_matches_5) %>% filter(res96h == TRUE)) +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
 
 
-# Let's try to use linear modelling
+# Let's try to use linear modelling for the one repeat (the other don't show such a linear correlation)
 
-mod <- lm(telrep_matches ~ gene_width, data = gene_telreps)
+mod <- lm(telrep_matches_1 ~ gene_width, data = gene_telreps)
 
 gene_telreps <- modelr::add_predictions(gene_telreps, mod) %>%
                 modelr::add_residuals(mod)
 
 
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches)) + geom_line(aes(y=pred), colour = "red", size = 1)
+ggplot(gene_telreps, aes(x = gene_width)) +
+  geom_point(aes(y = telrep_matches_1)) +
+  geom_line(aes(y=pred), colour = "red", size = 1)
 
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid))
+ggplot(gene_telreps, aes(x = gene_width)) +
+  geom_point(aes(y = resid))
 
-gene_telreps$res96h <- gene_telreps$gene_ID %in% names(selected_genes_96h)
+ggplot(mapping = aes(x = gene_width)) +
+  geom_point(data = filter(gene_telreps, res96h == FALSE), mapping = aes(y = telrep_matches_1, colour = res96h)) +
+  geom_point(data = filter(gene_telreps, res96h == TRUE), mapping = aes(y = telrep_matches_1, colour = res96h)) +
+  geom_line(data = gene_telreps, mapping = aes(y=pred), colour = "red", size = 1)
 
+ggplot(mapping = aes(x = gene_width)) +
+  geom_point(data = filter(gene_telreps, res96h == FALSE), mapping = aes(y = resid, colour = res96h)) +
+  geom_point(data = filter(gene_telreps, res96h == TRUE), mapping = aes(y = resid, colour = res96h))
 
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches, colour = res96h)) + geom_line(aes(y=pred), colour = "red", size = 1)
-
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid, colour = res96h))
-
-# And now let's try a Poisson GLM
-
-poisson_mod <- glm(telrep_matches ~ gene_width, poisson, data = gene_telreps)
-
-gene_telreps <- modelr::add_predictions(gene_telreps, poisson_mod) %>%
-                modelr::add_residuals(poisson_mod)
-
-
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches)) + geom_line(aes(y=pred), colour = "red", size = 1)
-
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid))
-
-gene_telreps$res96h <- gene_telreps$gene_ID %in% names(selected_genes_96h)
+ggplot(mapping = aes(x = gene_width)) +
+  geom_point(data = filter(gene_telreps, res96h == FALSE), mapping = aes(y = resid, colour = res96h)) +
+  geom_point(data = filter(gene_telreps, res96h == TRUE), mapping = aes(y = resid, colour = res96h)) +
+  scale_x_log10()
 
 
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = telrep_matches, colour = res96h)) + geom_line(aes(y=pred), colour = "red", size = 1)
+# Now do this just for promoter sequences.
 
-ggplot(gene_telreps, aes(x = gene_width)) + geom_point(aes( y = resid, colour = res96h))
+promoterSeqs <- getSeq(Dna, promoters(genes_in_data[seqnames(genes_in_data) != "MT"],
+                                      downstream = 1000))
 
+promoter_telreps <- data_frame(gene_ID = names(genes_in_data[seqnames(genes_in_data) != "MT"]),
+                           gene_width = width(genes_in_data[seqnames(genes_in_data) != "MT"]))
+
+promoter_telreps$res96h <- promoter_telreps$gene_ID %in% names(selected_genes_96h)
+
+for (number_reps in 1:5) {
+  
+  promoter_telrep_matches <- vmatchPattern(paste(rep("TTAGGG", number_reps), collapse = ""), promoterSeqs)
+  
+  promoter_telrep_number_matches <- unlist(lapply(promoter_telrep_matches, length))
+  
+  promoter_telreps[[paste0("promoter_telrep_matches_", number_reps)]] <- promoter_telrep_number_matches
+  
+}
+
+ggplot(promoter_telreps %>%
+         gather(key = "number_reps", value = "promoter_telrep_matches",
+                promoter_telrep_matches_1:promoter_telrep_matches_5),
+       aes(x = gene_width, y = promoter_telrep_matches)) +
+  geom_point() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+
+ggplot(promoter_telreps %>%
+         gather(key = "number_reps", value = "promoter_telrep_matches",
+                promoter_telrep_matches_1:promoter_telrep_matches_5),
+       aes(x = gene_width, y = promoter_telrep_matches)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+# No seeming linear correlation in promoters
+# Seems appropriate, as the size of the promoter is of an arbitrary size
+
+
+ggplot(mapping = aes(x = gene_width, y = promoter_telrep_matches, colour = res96h)) +
+  geom_point(data = promoter_telreps %>%
+               gather(key = "number_reps", value = "promoter_telrep_matches",
+                      promoter_telrep_matches_1:promoter_telrep_matches_5) %>% filter(res96h == FALSE)) +
+  geom_point(data = promoter_telreps %>%
+               gather(key = "number_reps", value = "promoter_telrep_matches",
+                      promoter_telrep_matches_1:promoter_telrep_matches_5) %>% filter(res96h == TRUE)) +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+
+ggplot(mapping = aes(x = gene_width, y = promoter_telrep_matches, colour = res96h)) +
+  geom_point(data = promoter_telreps %>%
+               gather(key = "number_reps", value = "promoter_telrep_matches",
+                      promoter_telrep_matches_1:promoter_telrep_matches_5) %>% filter(res96h == FALSE)) +
+  geom_point(data = promoter_telreps %>%
+               gather(key = "number_reps", value = "promoter_telrep_matches",
+                      promoter_telrep_matches_1:promoter_telrep_matches_5) %>% filter(res96h == TRUE)) +
+  scale_x_log10() +
+  facet_wrap(~ number_reps, scales = "free_y")
+
+# No enrichment at all of diff-expressed genes among those with more TTAGGG matches
 
 dev.off()
 
