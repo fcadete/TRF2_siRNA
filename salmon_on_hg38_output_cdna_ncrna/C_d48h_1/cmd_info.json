@@ -1,0 +1,11 @@
+{
+    "salmon_version": "0.8.1",
+    "index": "ensembl_transcriptome/Homo_sapiens.GRCh38.cdna.ncrna",
+    "libType": "A",
+    "threads": "40",
+    "gcBias": [],
+    "output": "salmon_on_hg38_output_cdna_ncrna/C_d48h_1",
+    "mates1": "filtered_fastq/C_d48h_1_1_filtered_paired.fq",
+    "mates2": "filtered_fastq/C_d48h_1_2_filtered_paired.fq",
+    "auxDir": "aux_info"
+}

@@ -1,0 +1,55 @@
+[2019-01-04 13:10:07.677] [jointLog] [info] parsing read library format
+[2019-01-04 13:10:07.677] [jointLog] [info] There is 1 library.
+[2019-01-04 13:10:07.801] [jointLog] [info] Loading Quasi index
+[2019-01-04 13:10:07.813] [jointLog] [info] Loading 32-bit quasi index
+[2019-01-04 13:10:23.439] [jointLog] [info] done
+[2019-01-04 13:10:23.439] [jointLog] [info] Index contained 226365 targets
+[2019-01-04 13:10:26.913] [jointLog] [info] Automatically detected most likely library type as ISR
+[2019-01-04 13:12:50.192] [fileLog] [info] 
+At end of round 0
+==================
+Observed 46541131 total fragments (46541131 in most recent round)
+
+[2019-01-04 13:12:50.191] [jointLog] [info] Computed 405637 rich equivalence classes for further processing
+[2019-01-04 13:12:50.191] [jointLog] [info] Counted 35409993 total reads in the equivalence classes 
+[2019-01-04 13:12:50.313] [jointLog] [info] Mapping rate = 76.0832%
+
+[2019-01-04 13:12:50.313] [jointLog] [info] finished quantifyLibrary()
+[2019-01-04 13:12:50.317] [jointLog] [info] Starting optimizer
+[2019-01-04 13:12:50.576] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+[2019-01-04 13:12:50.587] [jointLog] [info] iteration = 0 | max rel diff. = 46.1962
+[2019-01-04 13:12:50.667] [jointLog] [info] iteration 11, adjusting effective lengths to account for biases
+[2019-01-04 13:13:52.195] [jointLog] [info] Computed expected counts (for bias correction)
+[2019-01-04 13:13:52.196] [jointLog] [info] processed bias for 0.0% of the transcripts
+[2019-01-04 13:13:59.175] [jointLog] [info] processed bias for 10.0% of the transcripts
+[2019-01-04 13:14:07.239] [jointLog] [info] processed bias for 20.0% of the transcripts
+[2019-01-04 13:14:15.491] [jointLog] [info] processed bias for 30.0% of the transcripts
+[2019-01-04 13:14:23.581] [jointLog] [info] processed bias for 40.0% of the transcripts
+[2019-01-04 13:14:31.804] [jointLog] [info] processed bias for 50.0% of the transcripts
+[2019-01-04 13:14:40.403] [jointLog] [info] processed bias for 60.0% of the transcripts
+[2019-01-04 13:14:49.353] [jointLog] [info] processed bias for 70.0% of the transcripts
+[2019-01-04 13:14:53.228] [jointLog] [info] processed bias for 100.0% of the transcripts
+[2019-01-04 13:14:53.893] [jointLog] [info] iteration = 100 | max rel diff. = 0.317774
+[2019-01-04 13:14:54.583] [jointLog] [info] iteration = 200 | max rel diff. = 0.142934
+[2019-01-04 13:14:55.265] [jointLog] [info] iteration = 300 | max rel diff. = 0.0853141
+[2019-01-04 13:14:55.932] [jointLog] [info] iteration = 400 | max rel diff. = 0.0705336
+[2019-01-04 13:14:56.605] [jointLog] [info] iteration = 500 | max rel diff. = 0.028873
+[2019-01-04 13:14:57.299] [jointLog] [info] iteration = 600 | max rel diff. = 0.0363261
+[2019-01-04 13:14:57.968] [jointLog] [info] iteration = 700 | max rel diff. = 0.0296613
+[2019-01-04 13:14:58.620] [jointLog] [info] iteration = 800 | max rel diff. = 0.0298072
+[2019-01-04 13:14:59.297] [jointLog] [info] iteration = 900 | max rel diff. = 0.0353081
+[2019-01-04 13:14:59.992] [jointLog] [info] iteration = 1000 | max rel diff. = 0.0178352
+[2019-01-04 13:15:00.670] [jointLog] [info] iteration = 1100 | max rel diff. = 0.0187999
+[2019-01-04 13:15:01.342] [jointLog] [info] iteration = 1200 | max rel diff. = 0.0203806
+[2019-01-04 13:15:02.051] [jointLog] [info] iteration = 1300 | max rel diff. = 0.0135176
+[2019-01-04 13:15:02.694] [jointLog] [info] iteration = 1400 | max rel diff. = 0.0173666
+[2019-01-04 13:15:03.332] [jointLog] [info] iteration = 1500 | max rel diff. = 0.0140441
+[2019-01-04 13:15:03.968] [jointLog] [info] iteration = 1600 | max rel diff. = 0.0147511
+[2019-01-04 13:15:04.432] [jointLog] [info] iteration = 1674 | max rel diff. = 0.00653832
+[2019-01-04 13:15:04.461] [jointLog] [info] Finished optimizer
+[2019-01-04 13:15:04.461] [jointLog] [info] writing output 
+
+[2019-01-04 13:15:04.855] [jointLog] [warning] NOTE: Read Lib [( filtered_fastq/T_NT_1_1_filtered_paired.fq, filtered_fastq/T_NT_1_2_filtered_paired.fq )] :
+
+Greater than 5% of the fragments disagreed with the provided library type; check the file: salmon_on_hg38_output_cdna_ncrna/T_NT_1/lib_format_counts.json for details
+
