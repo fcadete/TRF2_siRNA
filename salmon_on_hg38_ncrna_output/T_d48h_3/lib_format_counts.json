@@ -1,0 +1,21 @@
+{
+    "read_files": "( filtered_fastq/T_d48h_3_1_filtered_paired.fq, filtered_fastq/T_d48h_3_2_filtered_paired.fq )",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 0.614816437471806,
+    "num_compatible_fragments": 3976993,
+    "num_assigned_fragments": 6468586,
+    "num_consistent_mappings": 7718390,
+    "num_inconsistent_mappings": 4315524,
+    "MSF": 0,
+    "OSF": 1738,
+    "ISF": 1220679,
+    "MSR": 0,
+    "OSR": 2466,
+    "ISR": 7718390,
+    "SF": 1560484,
+    "SR": 1524788,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

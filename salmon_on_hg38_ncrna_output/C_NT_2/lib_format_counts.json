@@ -1,0 +1,21 @@
+{
+    "read_files": "( filtered_fastq/C_NT_2_1_filtered_paired.fq, filtered_fastq/C_NT_2_2_filtered_paired.fq )",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 0.6004498623105331,
+    "num_compatible_fragments": 3861140,
+    "num_assigned_fragments": 6430412,
+    "num_consistent_mappings": 7637710,
+    "num_inconsistent_mappings": 4426098,
+    "MSF": 0,
+    "OSF": 1859,
+    "ISF": 1241429,
+    "MSR": 0,
+    "OSR": 2304,
+    "ISR": 7637710,
+    "SF": 1655833,
+    "SR": 1517025,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}
