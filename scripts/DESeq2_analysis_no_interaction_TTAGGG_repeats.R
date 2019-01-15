@@ -14,6 +14,8 @@ library("VennDiagram")
 
 library("Rsamtools")
 
+library("biomaRt")
+
 setwd("/mnt/TRF2_siRNA/")
 
 pdf("DESeq2_analysis_no_interaction_results/TTAGGG_repeat_analysis.pdf", width = 10)
@@ -257,7 +259,186 @@ ggplot(mapping = aes(x = gene_width, y = promoter_telrep_matches, colour = res96
   scale_x_log10() +
   facet_wrap(~ number_reps, scales = "free_y")
 
+ggplot(data = promoter_telreps %>%
+         gather(key = "number_reps", value = "promoter_telrep_matches",
+                promoter_telrep_matches_1:promoter_telrep_matches_5),
+       mapping = aes(x = number_reps, y = promoter_telrep_matches, colour = res96h)) +
+  geom_boxplot()
+
+ggplot(data = promoter_telreps %>%
+         gather(key = "number_reps", value = "promoter_telrep_matches",
+                promoter_telrep_matches_1:promoter_telrep_matches_5),
+       mapping = aes(x = number_reps, y = promoter_telrep_matches, colour = res96h)) +
+  geom_boxplot()
+
+
 # No enrichment at all of diff-expressed genes among those with more TTAGGG matches
+
+# Let's see if there is any enrichment in exons.
+
+exons_in_data <- GenomicFeatures::exons(EnsDb.Hsapiens.v86, filter = GeneIdFilter(rownames(res96h)))
+
+exons_in_data <- exons_in_data[seqnames(exons_in_data) %in% seqnames(seqinfo(Dna))]
+
+exons_in_data <- lapply(unique(exons_in_data$gene_id), function(x) {
+  
+  gene_ranges <- GenomicRanges::reduce(exons_in_data[exons_in_data$gene_id == x])
+  
+  gene_ranges$gene_id <- x
+  
+  return(gene_ranges)
+  
+  })
+
+names(exons_in_data) <- unique(exons_in_data$gene_id)
+
+exon_matches <- lapply(exons_in_data, function(x) {
+
+  exon_sequences <- getSeq(Dna, x)
+  
+  telrep_matches <- vmatchPattern(rep("TTAGGG", collapse = ""), exon_sequences)
+  
+  telrep_matches <- sum(unlist(lapply(telrep_matches, length)))
+  
+  return(telrep_matches)
+  
+  
+})
+
+names(exon_matches) <- unlist(lapply(exons_in_data, function(x) unique(x$gene_id)))
+
+exon_matches <- unlist(exon_matches)
+
+reduced_exon_width <- unlist(lapply(exons_in_data, function(x) sum(width(x))))
+
+exon_match_frame <- data_frame(gene_ID = names(exon_matches),
+                               exon_matches = exon_matches,
+                               exon_width = reduced_exon_width,
+                               res96h = names(exon_matches) %in% names(selected_genes_96h))
+
+
+ggplot(exon_match_frame, aes(x = exon_width, y = exon_matches)) + geom_point()
+
+ggplot(exon_match_frame, aes(x = exon_width, y = exon_matches)) + geom_point() + scale_y_log10() + scale_x_log10()
+
+# There is a small correlation between the number of matches and the length of the exons, but seems extremely small
+
+ggplot(exon_match_frame, aes(x = res96h, colour = res96h, y = exon_matches)) + geom_boxplot()
+
+# 5' and 3'UTR
+
+ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+
+results <- getBM(attributes = c('ensembl_gene_id',
+                                'chromosome_name',
+                                '5_utr_start', '5_utr_end',
+                                '3_utr_start', '3_utr_end'),
+                 filters = 'ensembl_gene_id',
+                 values = rownames(res96h),
+                 mart = ensembl)
+
+utr5_ranges <- with(results %>% filter(is.na(`5_utr_start`) == FALSE, is.na(`5_utr_end`) == FALSE),
+                    GRanges(seqnames = chromosome_name,
+                            ranges = IRanges(start = `5_utr_start`,
+                                             end = `5_utr_end`),
+                            strand = "*",
+                            gene_id = ensembl_gene_id))
+
+utr5_ranges <- utr5_ranges[seqnames(utr5_ranges) %in% seqnames(seqinfo(Dna))]
+
+utr5_ranges_reduced <- lapply(unique(utr5_ranges$gene_id), function(x) {
+  
+  gene_ranges <- GenomicRanges::reduce(utr5_ranges[utr5_ranges$gene_id == x])
+  
+  gene_ranges$gene_id <- x
+  
+  return(gene_ranges)
+  
+})
+
+names(utr5_ranges_reduced) <- unique(utr5_ranges$gene_id)
+
+utr5_matches <- lapply(utr5_ranges_reduced, function(x) {
+  
+  exon_sequences <- getSeq(Dna, x)
+  
+  telrep_matches <- vmatchPattern(rep("TTAGGG", collapse = ""), exon_sequences)
+  
+  telrep_matches <- sum(unlist(lapply(telrep_matches, length)))
+  
+  return(telrep_matches)
+  
+  
+})
+
+utr5_matches <- unlist(utr5_matches)
+
+reduced_utr5_width <- unlist(lapply(utr5_ranges_reduced, function(x) sum(width(x))))
+
+utr5_match_frame <- data_frame(gene_ID = names(utr5_matches),
+                               utr5_matches = utr5_matches,
+                               utr5_width = reduced_utr5_width,
+                               res96h = names(utr5_matches) %in% names(selected_genes_96h))
+
+
+ggplot(utr5_match_frame, aes(x = utr5_width, y = utr5_matches)) + geom_point()
+
+ggplot(utr5_match_frame, aes(x = utr5_width, y = utr5_matches)) + geom_point() + scale_y_log10() + scale_x_log10()
+
+ggplot(utr5_match_frame, aes(x = res96h, colour = res96h, y = utr5_matches)) + geom_boxplot()
+
+
+
+utr3_ranges <- with(results %>% filter(is.na(`3_utr_start`) == FALSE, is.na(`3_utr_end`) == FALSE),
+                    GRanges(seqnames = chromosome_name,
+                            ranges = IRanges(start = `3_utr_start`,
+                                             end = `3_utr_end`),
+                            strand = "*",
+                            gene_id = ensembl_gene_id))
+
+utr3_ranges <- utr3_ranges[seqnames(utr3_ranges) %in% seqnames(seqinfo(Dna))]
+
+utr3_ranges_reduced <- lapply(unique(utr3_ranges$gene_id), function(x) {
+  
+  gene_ranges <- GenomicRanges::reduce(utr3_ranges[utr3_ranges$gene_id == x])
+  
+  gene_ranges$gene_id <- x
+  
+  return(gene_ranges)
+  
+})
+
+names(utr3_ranges_reduced) <- unique(utr3_ranges$gene_id)
+
+utr3_matches <- lapply(utr3_ranges_reduced, function(x) {
+  
+  exon_sequences <- getSeq(Dna, x)
+  
+  telrep_matches <- vmatchPattern(rep("TTAGGG", collapse = ""), exon_sequences)
+  
+  telrep_matches <- sum(unlist(lapply(telrep_matches, length)))
+  
+  return(telrep_matches)
+  
+  
+})
+
+utr3_matches <- unlist(utr3_matches)
+
+reduced_utr3_width <- unlist(lapply(utr3_ranges_reduced, function(x) sum(width(x))))
+
+utr3_match_frame <- data_frame(gene_ID = names(utr3_matches),
+                               utr3_matches = utr3_matches,
+                               utr3_width = reduced_utr3_width,
+                               res96h = names(utr3_matches) %in% names(selected_genes_96h))
+
+
+ggplot(utr3_match_frame, aes(x = utr3_width, y = utr3_matches)) + geom_point()
+
+ggplot(utr3_match_frame, aes(x = utr3_width, y = utr3_matches)) + geom_point() + scale_y_log10() + scale_x_log10()
+
+ggplot(utr3_match_frame, aes(x = res96h, colour = res96h, y = utr3_matches)) + geom_boxplot()
+
 
 dev.off()
 

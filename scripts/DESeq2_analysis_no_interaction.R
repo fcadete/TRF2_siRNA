@@ -283,6 +283,23 @@ multidensity( list(
   background =log2(res96h[backG, "baseMean"])), 
   xlab="log2 mean normalized counts", main = "Matching for enrichment analysis")
 
+
+# get function to extract genes in enriched GO terms
+getGoGenes <- function(topGoObject, topGoResTable, selected_gene_names) {
+  
+  allGoGeneTerms <- lapply(genesInTerm(topGoObject),
+                           function(x) x[x %in% selected_gene_names])
+  
+  sigGoGeneTerms <- allGoGeneTerms[topGoResTable[topGoResTable$Fisher.classic < 0.01, "GO.ID"]]
+  
+  collapsedEnsemblIds <- lapply(sigGoGeneTerms, function(x) paste(x, collapse = ":"))
+  
+  collapsedGeneNames <- lapply(sigGoGeneTerms, function(x) paste(selected_genes_96h[x]$gene_name, collapse = ":"))
+  
+  data.frame(GO = names(sigGoGeneTerms), Ensembl = unlist(collapsedEnsemblIds), Names = unlist(collapsedGeneNames))
+  
+}
+
 geneIDs = rownames(overallBaseMean)
 inUniverse = geneIDs %in% c(names(selected_genes_96h),  backG) 
 inSelection =  geneIDs %in% names(selected_genes_96h) 
@@ -307,12 +324,13 @@ showSigOfNodes(tgd.BP,
                useInfo = 'all')
 dev.off()
 
-
 write.table(allRes.BP %>% filter(Fisher.classic < 0.01),
             file = "DESeq2_analysis_no_interaction_results/top_BP_GO_results.txt",
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
-
+write.table(getGoGenes(tgd.BP, allRes.BP %>% filter(Fisher.classic < 0.01), names(selected_genes_96h)),
+            file = "DESeq2_analysis_no_interaction_results/top_BP_GO_genes.txt",
+            sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 # Quick look up to see if "response to dsRNA" terms are overpresented
 GenTable(tgd.BP, Fisher.elim = resultTopGO.elim.BP,
@@ -357,6 +375,9 @@ write.table(allRes.MF %>% filter(Fisher.classic < 0.01),
             file = "DESeq2_analysis_no_interaction_results/top_MF_GO_results.txt",
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
+write.table(getGoGenes(tgd.MF, allRes.MF %>% filter(Fisher.classic < 0.01), names(selected_genes_96h)),
+            file = "DESeq2_analysis_no_interaction_results/top_MF_GO_genes.txt",
+            sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 # For upregulated genes only
 overallBaseMean <- as.matrix(res96h[, "baseMean", drop = F])
@@ -409,6 +430,10 @@ write.table(allRes.BP %>% filter(Fisher.classic < 0.01),
             file = "DESeq2_analysis_no_interaction_results/top_BP_GO_UP_results.txt",
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
+write.table(getGoGenes(tgd.BP, allRes.BP %>% filter(Fisher.classic < 0.01), names(selected_genes_96h)),
+            file = "DESeq2_analysis_no_interaction_results/top_BP_GO_UP_genes.txt",
+            sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
+
 
 # Same for Molecular Function ontology
 tgd.MF <- new( "topGOdata", ontology="MF", allGenes = alg, nodeSize=5,
@@ -435,6 +460,9 @@ write.table(allRes.MF %>% filter(Fisher.classic < 0.01),
             file = "DESeq2_analysis_no_interaction_results/top_MF_GO_UP_results.txt",
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
+write.table(getGoGenes(tgd.MF, allRes.MF %>% filter(Fisher.classic < 0.01), names(selected_genes_96h)),
+            file = "DESeq2_analysis_no_interaction_results/top_MF_GO_UP_genes.txt",
+            sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 
 # For downregulated genes only
@@ -480,6 +508,10 @@ write.table(allRes.BP %>% filter(Fisher.classic < 0.01),
             file = "DESeq2_analysis_no_interaction_results/top_BP_GO_DOWN_results.txt",
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
+write.table(getGoGenes(tgd.BP, allRes.BP %>% filter(Fisher.classic < 0.01), names(selected_genes_96h)),
+            file = "DESeq2_analysis_no_interaction_results/top_MF_GO_DOWN_genes.txt",
+            sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
+
 pdf("DESeq2_analysis_no_interaction_results/top_BP_GO_DOWN_results.pdf", width = 12)
 showSigOfNodes(tgd.BP,
                score(resultTopGO.classic.BP),
@@ -502,6 +534,10 @@ allRes.MF <- GenTable(tgd.MF, Fisher.elim = resultTopGO.elim.MF,
 
 write.table(allRes.MF %>% filter(Fisher.classic < 0.01),
             file = "DESeq2_analysis_no_interaction_results/top_MF_GO_DOWN_results.txt",
+            sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
+
+write.table(getGoGenes(tgd.MF, allRes.MF %>% filter(Fisher.classic < 0.01), names(selected_genes_96h)),
+            file = "DESeq2_analysis_no_interaction_results/top_MF_GO_DOWN_genes.txt",
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
 
 pdf("DESeq2_analysis_no_interaction_results/top_MF_GO_DOWN_results.pdf", width = 12)
